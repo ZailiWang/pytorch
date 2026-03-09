@@ -745,7 +745,7 @@ because the core number on this node is not dividable by %d.",
                 entrypoint = cmd[0]
             del cmd[0]
             launch_args[i] = tuple(cmd)
-            launch_envs[i] = {"OMP_NUM_THREADS": args.ncores_per_instance[i]}
+            launch_envs[i] = {"OMP_NUM_THREADS": str(args.ncores_per_instance[i])}
             launch_tee[i] = Std.ALL
 
             if args.rank != -1:  # launches single instance, rank, only
