@@ -411,7 +411,6 @@ Value applied: %s. Value ignored: %s",
     # In this case, KMP_AFFINITY should not be set.
     def set_multi_thread_and_allocator(
         self,
-        ncores_per_instance,
         disable_iomp=False,
         set_kmp_affinity=True,
         enable_tcmalloc=True,
@@ -427,7 +426,6 @@ Value applied: %s. Value ignored: %s",
         self.set_memory_allocator(
             enable_tcmalloc, enable_jemalloc, use_default_allocator
         )
-        self.set_env("OMP_NUM_THREADS", str(ncores_per_instance))
         if not disable_iomp:
             find_iomp = self.add_lib_preload(lib_type="iomp5")
             if not find_iomp:
@@ -655,7 +653,6 @@ because the core number on this node is not dividable by %d.",
             enable_taskset = True
 
         self.set_multi_thread_and_allocator(
-            args.ncores_per_instance,
             args.disable_iomp,
             set_kmp_affinity,
             args.enable_tcmalloc,
@@ -748,7 +745,7 @@ because the core number on this node is not dividable by %d.",
                 entrypoint = cmd[0]
             del cmd[0]
             launch_args[i] = tuple(cmd)
-            launch_envs[i] = {}
+            launch_envs[i] = {"OMP_NUM_THREADS": args.ncores_per_instance[i]}
             launch_tee[i] = Std.ALL
 
             if args.rank != -1:  # launches single instance, rank, only
