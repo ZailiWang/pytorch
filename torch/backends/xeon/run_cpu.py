@@ -748,7 +748,11 @@ because the core number on this node is not dividable by %d.",
             # Use user defined OMP_NUM_THREADS if set explicitly in prior
             # Else set it as ncores-per-instance of the current instance
             predef_omp_thr_num = os.environ.get("OMP_NUM_THREADS")
-            launch_envs[i] = {"OMP_NUM_THREADS": str(args.ncores_per_instance[i])} if predef_omp_thr_num is None else {}
+            launch_envs[i] = (
+                {"OMP_NUM_THREADS": str(args.ncores_per_instance[i])}
+                if predef_omp_thr_num is None
+                else {}
+            )
             launch_tee[i] = Std.ALL
 
             if args.rank != -1:  # launches single instance, rank, only
