@@ -110,14 +110,14 @@ class TestTorchrun(TestCase):
         num = 0
         with subprocess.Popen(
             f'python -m torch.backends.xeon.run_cpu --ninstances 3 --ncores-per-instance 5 5 6 --use-default-allocator \
-            --disable-iomp --disable-numactl --disable-taskset --log-path {self._test_dir} --no-python echo "test\n"',
+            --disable-iomp --disable-numactl --disable-taskset --log-path {self._test_dir} --no-python pwd',
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         ) as p:
             for line in p.stdout.readlines():
                 segs = str(line, "utf-8").strip().split("-")
-                if segs[-1].strip() == "test":
+                if segs[-1].strip() == "pwd":
                     num += 1
         if num != 3:
             raise AssertionError(
